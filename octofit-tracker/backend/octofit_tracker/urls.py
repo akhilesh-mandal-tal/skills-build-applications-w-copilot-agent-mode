@@ -32,15 +32,30 @@ router = DefaultRouter()
 router.register(r'activities', ActivityViewSet, basename='activity')
 
 
+# API root for /api/ and / (homepage)
 @api_view(['GET'])
 def api_root(request):
     return Response({
-        'admin': f'{base_url}/admin/',
-        'api': f'{base_url}/api/',
+        'users': f'{base_url}/api/users/',
+        'teams': f'{base_url}/api/teams/',
         'activities': f'{base_url}/api/activities/',
+        'workouts': f'{base_url}/api/workouts/',
+        'leaderboard': f'{base_url}/api/leaderboard/',
+    })
+
+# Root endpoint for /
+@api_view(['GET'])
+def root(request):
+    return Response({
+        'users': f'{base_url}/api/users/',
+        'teams': f'{base_url}/api/teams/',
+        'activities': f'{base_url}/api/activities/',
+        'workouts': f'{base_url}/api/workouts/',
+        'leaderboard': f'{base_url}/api/leaderboard/',
     })
 
 urlpatterns = [
+    path('', root, name='root'),
     path('admin/', admin.site.urls),
     path('api/', api_root, name='api-root'),
     path('api/', include(router.urls)),
