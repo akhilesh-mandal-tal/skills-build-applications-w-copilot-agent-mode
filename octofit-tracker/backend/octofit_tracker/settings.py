@@ -26,9 +26,9 @@ SECRET_KEY = 'django-insecure-d_59fgcu5t%cxtn4zvo!6x!c8h#f%4d4a-ugu*-8oa*@@3cc7_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-if os.environ.get('CODESPACE_NAME'):
-    ALLOWED_HOSTS.append(f"{os.environ.get('CODESPACE_NAME')}-8000.app.github.dev")
+
+# Allow all hosts for development
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -41,10 +41,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'djongo',
+    'corsheaders',
     'apps.activities_app.apps.OctofitActivitiesConfig',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -80,10 +83,20 @@ WSGI_APPLICATION = 'octofit_tracker.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'djongo',
+        'NAME': 'octofit_db',
+        'ENFORCE_SCHEMA': False,
+        'CLIENT': {
+            'host': 'localhost',
+            'port': 27017,
+        }
     }
 }
+# CORS settings
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = ['*']
+CORS_ALLOW_METHODS = ['*']
 
 
 # Password validation
